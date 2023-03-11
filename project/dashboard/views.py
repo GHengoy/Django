@@ -7,49 +7,31 @@ from django.utils import timezone
 from .models import Choice, Question
 
 
-class IndexView(generic.ListView):
-    template_name = 'dashboard/index.html'
-    context_object_name = 'latest_question_list'
-
-    def get_queryset(self):
-        """
-        Return the last five published questions (not including those set to be
-        published in the future).
-        """
-        return Question.objects.filter(
-            pub_date__lte=timezone.now()
-        ).order_by('-pub_date')[:5]
-
-
-class DetailView(generic.DetailView):
-    model = Question
-    template_name = 'dashboard/detail.html'
-    def get_queryset(self):
-        """
-        Excludes any questions that aren't published yet.
-        """
-        return Question.objects.filter(pub_date__lte=timezone.now())
-
-
-class ResultsView(generic.DetailView):
-    model = Question
-    template_name = 'dashboard/results.html'
-
-
-def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    try:
-        selected_choice = question.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'dashboard/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('dashboard:results', args=(question.id,)))
+def index(request):
+    return render(request, 'dashboard/index.html')
+def error(request):
+    return render(request, 'dashboard/404.html')
+def blank(request):
+    return render(request, 'dashboard/blank.html')
+def buttons(request):
+    return render(request, 'dashboard/buttons.html')
+def cards(request):
+    return render(request, 'dashboard/cards.html')
+def charts(request):
+    return render(request, 'dashboard/charts.html')
+def forgot_passwrod(request):
+    return render(request, 'dashboard/forgot-passwrod.html')
+def login(request):
+    return render(request, 'dashboard/login.html')
+def register(request):
+    return render(request, 'dashboard/register.html')
+def tables(request):
+    return render(request, 'dashboard/tables.html')
+def utilities_animation(request):
+    return render(request, 'dashboard/utilities-animation.html')
+def utilities_border(request):
+    return render(request, 'dashboard/utilities-border.html')
+def utilities_color(request):
+    return render(request, 'dashboard/utilities-color.html')
+def utilities_other(request):
+    return render(request, 'dashboard/utilities-other.html')
